@@ -1,0 +1,12 @@
+/var/log/nginx/*_access.log /var/log/nginx/*_error.log {
+    create 0644 nginx nginx
+    daily
+    rotate 30
+    missingok
+    notifempty
+    compress
+    sharedscripts
+    postrotate
+        /bin/kill -USR1 `cat /run/nginx.pid 2>/dev/null` 2>/dev/null || true
+    endscript
+}

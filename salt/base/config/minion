@@ -1,0 +1,2 @@
+master: {{ master_ip }}
+id: {{ minion_id }}

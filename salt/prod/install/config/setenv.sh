@@ -1,0 +1,2 @@
+CATALINA_PID="$CATALINA_BASE/logs/tomcat.pid"
+JAVA_OPTS="-Xms1G -Xmx1G"
