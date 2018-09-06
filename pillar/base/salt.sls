@@ -1,2 +1,2 @@
 salt_master:
-  ip: 172.16.2.1
+  ip: 47.98.x.x

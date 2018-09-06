@@ -20,12 +20,13 @@ mysql-conf:
     - name: |
         mkdir /data/mysql
         chown -R mysql:mysql /data/mysql
-        ln -s /tmp/mysql.sock /var/lib/mysql/mysql.sock
+        ln -s /data/mysql /var/lib/mysql
     - require:
       - file: mysql-conf
     - onlyif:
       - test -d /data
       - test ! -d /data/mysql
+      - test ! -d /var/lib/mysql
   service.running:
     - name: mysqld
     - enable: true

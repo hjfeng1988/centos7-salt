@@ -7,7 +7,9 @@ redis-install-post1:
     - name: |
         mv /var/lib/redis /data
         ln -s /data/redis /var/lib/redis
-    - onlyif: test -d /data && test ! -L /var/lib/redis
+    - onlyif:
+      - test -d /data
+      - test ! -L /var/lib/redis
     - require:
       - pkg: redis-install
 

@@ -21,7 +21,7 @@ user="$1"
 group="$2"
 user_sshkey="${user}_sshkey"
 
-hjfeng_sshkey=""
+hjfeng_sshkey="ssh-rsa AAAAB3NzaC1yc2EAAA..."
 
 # 判断脚本传参，打印脚本用法
 [[ "$#" -ne 2 ]] && {

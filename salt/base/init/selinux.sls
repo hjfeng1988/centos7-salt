@@ -1,4 +1,4 @@
-# /etc/sysconfig/selinux 关闭selinux
+# /etc/sysconfig/selinux
 /etc/sysconfig/selinux:
   file.replace:
     - pattern: SELINUX=enforcing

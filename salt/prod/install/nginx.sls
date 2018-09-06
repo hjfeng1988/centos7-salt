@@ -5,9 +5,8 @@ nginx-install:
 nginx-log:
   cmd.run:
     - name: |
-        mkdir -p /data/logs/nginx
-        chown -R nginx:nginx /data/logs/nginx
-        rm -rf /var/log/nginx
+        mkdir -p /data/logs
+        mv /var/log/nginx /data/logs
         ln -s /data/logs/nginx /var/log/nginx
     - onlyif:
       - test -d /data

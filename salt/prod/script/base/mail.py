@@ -10,8 +10,8 @@ if len(sys.argv) < 4:
     print sys.argv[0],"mail_to subject content/htmlfile"
     sys.exit()
 
-mail_from = "monitor@ulandian.com"
-mail_pass = "pass"
+mail_from = "monitor@your.com"
+mail_pass = ""
 mail_to = sys.argv[1]
 subject = sys.argv[2]
 argv3 = sys.argv[3]
@@ -33,7 +33,7 @@ msg['Subject'] = subject
 
 # 发送邮件
 server = smtplib.SMTP_SSL()
-server.connect('smtp.ulandian.com')
+server.connect('smtp.your.com')
 server.login(mail_from,mail_pass)
 server.sendmail(mail_from, mail_to.split(','), msg.as_string())
 server.quit()

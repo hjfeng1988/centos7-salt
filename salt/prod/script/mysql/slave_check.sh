@@ -8,7 +8,7 @@ port=3306
 tmp_log=/tmp/slave_check.log
 tmp_html=/tmp/slave_check.html
 mail_py=/data/script/mail.py
-mail_to="hjfeng@email.com"
+mail_to="your@email.com"
 
 
 function write2html()

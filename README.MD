@@ -13,7 +13,7 @@ host102:
   passwd: password
 ```
 
-2.安装minion客户端，使用salt-repo-2017.7-1.el7.noarch.rpm，master最好也需要此版本
+2.安装minion客户端，因host.only使用salt-repo-2017.7，因watch_any使用2108版 ，master最好也需要此版本
 
 `salt-ssh -i \* state.sls minion`
 

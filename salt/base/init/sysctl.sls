@@ -12,5 +12,4 @@
   file.replace:
     - name: /etc/sysctl.conf
     - pattern: '^net.ipv4.tcp_max_tw_buckets =.*'
-    - repl: 'net.ipv4.tcp_max_tw_buckets = 50000'
-
+    - repl: 'net.ipv4.tcp_max_tw_buckets = 100000'

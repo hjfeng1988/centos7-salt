@@ -7,7 +7,7 @@ rsa="/root/.ssh/backup_rsa"
 rsync_log=$log_bak_dir/rsync_${ymd}.log
 data_file=$(ls -1 $mysql_bak_dir | grep "$ymd.sql")
 ruser="backup"
-rip=172.16.2.1
+rip=172.16.2.99
 random_time=$(($RANDOM%1800))
 
 test -d $log_bak_dir || mkdir -p $log_bak_dir
