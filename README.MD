@@ -35,13 +35,13 @@ host102:
 [root@salt-master ~]# grep -Ev "^$|#" /etc/salt/master 
 interface: 0.0.0.0
 file_roots:
- base:
-   - /srv/salt/base
- prod:
-   - /srv/salt/prod
- pillar_roots:
- base:
-   - /srv/pillar/base
- prod:
-   - /srv/pillar/prod
+  base:
+    - /srv/salt/base
+  prod:
+    - /srv/salt/prod
+pillar_roots:
+  base:
+    - /srv/pillar/base
+  prod:
+    - /srv/pillar/prod
 ```
