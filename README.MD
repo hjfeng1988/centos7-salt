@@ -29,9 +29,9 @@ host102:
 
 `salt host101 state.sls install.jdk saltenv=prod`
 
-master配置信息
-
->[root@salt-master ~]# grep -Ev "^$|#" /etc/salt/master 
+>master配置信息
+```
+[root@salt-master ~]# grep -Ev "^$|#" /etc/salt/master 
 interface: 0.0.0.0
 file_roots:
   base:
@@ -43,3 +43,4 @@ pillar_roots:
     - /srv/pillar/base
   prod:
     - /srv/pillar/prod
+```
