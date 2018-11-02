@@ -1,4 +1,4 @@
-1.master配置好/etc/salt/roster
+### 1.master配置好/etc/salt/roster
 
 ```
 [root@salt-master ~]# cat /etc/salt/roster 
@@ -13,19 +13,20 @@ host102:
   passwd: password
 ```
 
-2.安装minion客户端，因host.only使用salt-repo-2017.7，因watch_any使用2108版 ，master最好也需要此版本
+### 2.安装minion客户端，因host.only使用salt-repo-2017.7，因watch_any使用2108版 ，master最好也需要此版本
 
 `salt-ssh -i \* state.sls minion`
 
-3.master接受客户端
+### 3.master接受客户端
 
 `salt-key -a 'host101,host102'`
 
-4.minion环境初始化
+### 4.minion环境初始化
 
+> init前替换好自己的密钥至salt/base/init/config/root.pub，要不然执行后ssh将登录不上
 `salt \* state.sls init`
 
-5.minion安装软件
+### 5.minion安装软件
 
 `salt host101 state.sls install.jdk saltenv=prod`
 
