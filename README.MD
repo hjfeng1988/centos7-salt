@@ -23,7 +23,7 @@ host102:
 `salt-key -a 'host101,host102'`
 
 ### 4.minion环境初始化
-> init前替换好自己的密钥至salt/base/init/config/root.pub，要不然执行后ssh将登录不上
+> init前替换好自己的公钥至salt/base/init/config/root.pub
 
 `salt \* state.sls init`
 
