@@ -18,12 +18,13 @@
   # /etc/rsyslog.conf local1.notice单独记录到cmd.log
   file.append:
     - name: /etc/rsyslog.conf
-    - text: local1.notice                                           /var/log/cmd.log
+    - text: "local1.notice                                           /var/log/cmd.log"
     - require:
       - file: /etc/profile.d/cmd_log.sh
   service.running:
     - name: rsyslog
-    - watch:
+    - watch_any:
+      - file: /etc/rsyslog.conf1
       - file: /etc/rsyslog.conf2
 
 # cmd.log日志轮询

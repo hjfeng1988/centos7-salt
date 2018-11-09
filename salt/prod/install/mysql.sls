@@ -5,6 +5,7 @@ mysql-repo:
         yum install -y yum-utils
         yum-config-manager --disable mysql80-community
         yum-config-manager --enable mysql56-community
+    - unless: rpm --quiet -q mysql80-community-release
 
 mysql-install:
   pkg.installed:
@@ -16,21 +17,8 @@ mysql-conf:
     - source: salt://install/config/my.cnf
     - require:
       - pkg: mysql-install
-  cmd.run:
-    - name: |
-        mkdir /data/mysql
-        chown -R mysql:mysql /data/mysql
-        ln -s /data/mysql /var/lib/mysql
-    - require:
-      - file: mysql-conf
-    - onlyif:
-      - test -d /data
-      - test ! -d /data/mysql
-      - test ! -d /var/lib/mysql
   service.running:
     - name: mysqld
     - enable: true
     - watch:
       - file: mysql-conf
-    - require:
-      - cmd: mysql-conf

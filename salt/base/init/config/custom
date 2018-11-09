@@ -1,0 +1,3 @@
+Cmnd_Alias DELEGATING = /usr/sbin/visudo, /bin/chown, /bin/chmod, /bin/chgrp
+%admin        ALL=(ALL)        NOPASSWD: ALL
+%super        ALL=(ALL)        NOPASSWD: ALL,!DELEGATING

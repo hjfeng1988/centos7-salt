@@ -2,18 +2,6 @@ nginx-install:
   pkg.installed:
     - name: nginx
 
-nginx-log:
-  cmd.run:
-    - name: |
-        mkdir -p /data/logs
-        mv /var/log/nginx /data/logs
-        ln -s /data/logs/nginx /var/log/nginx
-    - onlyif:
-      - test -d /data
-      - test ! -L /var/log/nginx
-    - require:
-      - pkg: nginx-install
-
 nginx-conf:
   file.managed:
     - name: /etc/nginx/nginx.conf

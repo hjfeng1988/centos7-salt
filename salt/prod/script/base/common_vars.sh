@@ -22,6 +22,8 @@ web_bak_dir=$bak_dir/web
 log_bak_dir=$bak_dir/logs
 mysql_bak_dir=$bak_dir/mysql
 
+ftp_server=ftp.your.cn
+
 # 字体打印红色
 function echo_red()
 {

@@ -1,6 +1,6 @@
 mysql_bak:
   cron.present:
-    - name: /data/script/mysql_bak.sh &> /dev/null
+    - name: /data/script/mysql_db_bak.sh &> /dev/null
     - user: root
     - minute: 2
     - hour: 2

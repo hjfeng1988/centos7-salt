@@ -26,5 +26,5 @@ ssh_key_{{ user }}:
     - user: {{ user }}
     - source: salt://init/config/{{ user }}.pub
     - require:
-      - file: /etc/sudoers
+      - file: /etc/sudoers.d/custom
 {% endfor %}

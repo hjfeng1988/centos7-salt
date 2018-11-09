@@ -1,3 +1,7 @@
+base-cmd:
+  cmd.run:
+    - name: mkdir /data
+
 base-sh:
   file.recurse:
     - name: /data/script

@@ -11,7 +11,7 @@ if len(sys.argv) < 4:
     sys.exit()
 
 mail_from = "monitor@your.com"
-mail_pass = ""
+mail_pass = "pass"
 mail_to = sys.argv[1]
 subject = sys.argv[2]
 argv3 = sys.argv[3]

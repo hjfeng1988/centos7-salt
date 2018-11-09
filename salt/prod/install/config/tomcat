@@ -4,6 +4,6 @@
     dateext
     missingok
     notifempty
-    compress
+    #compress
     copytruncate
 }

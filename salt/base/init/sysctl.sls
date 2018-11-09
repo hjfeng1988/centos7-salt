@@ -4,9 +4,9 @@
     - name: /etc/sysctl.conf
     - text: |
 
-            # add by hjfeng
-            net.ipv4.tcp_tw_reuse = 1
-            net.ipv4.tcp_timestamps = 1
+        # add by hjfeng
+        net.ipv4.tcp_tw_reuse = 1
+        net.ipv4.tcp_timestamps = 1
 
 /etc/sysctl.conf2:
   file.replace:

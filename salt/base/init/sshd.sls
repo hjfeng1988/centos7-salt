@@ -28,5 +28,7 @@
   service.running:
     - name: sshd
     - reload: true
-    - watch:
+    - watch_any:
+      - file: /etc/ssh/sshd_config1
+      - file: /etc/ssh/sshd_config2
       - file: /etc/ssh/sshd_config3

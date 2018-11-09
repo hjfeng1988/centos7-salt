@@ -8,11 +8,14 @@ filebeat-repo:
 filebeat-install:
   pkg.installed:
     - name: filebeat
-    - version: 6.3.0
+    - version: 6.4.0
     - require:
       - file: filebeat-repo
   cmd.run:
     - name: filebeat modules enable system
+    - unless: filebeat modules list | sed -n '/Enabled/,/Disabled/p' | grep system
+    - require:
+      - pkg: filebeat-install
 
 filebeat-conf:
   file.managed:
@@ -23,5 +26,6 @@ filebeat-conf:
   service.running:
     - name: filebeat
     - enable: true
-    - watch:
+    - watch_any:
       - file: filebeat-conf
+      - cmd: filebeat-install

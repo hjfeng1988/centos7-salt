@@ -23,7 +23,7 @@ salt-minion:
     {% if "172.16" in grains['fqdn_ip4']|string %}
       master_ip: {{ salt_master }}
     {% else %}
-        master_ip: {{ pillar['salt_master']['ip'] }}
+      master_ip: {{ pillar['salt_master']['ip'] }}
     {% endif %}
       minion_id: {{ grains['id'] }}
     - require:

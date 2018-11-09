@@ -10,6 +10,19 @@ zabbix-install:
     - require:
       - cmd: zabbix-repo
 
+zabbix-file1:
+  file.managed:
+    - name: /etc/zabbix/zabbix_agentd.d/disk_discovery.py
+    - source: salt://install/config/disk_discovery.py
+    - require:
+      - pkg: zabbix-install
+zabbix-file2:
+  file.managed:
+    - name: /etc/zabbix/zabbix_agentd.d/userparameter_custom.conf
+    - source: salt://install/config/userparameter_custom.conf
+    - require:
+      - pkg: zabbix-install
+
 zabbix-conf1:
   file.replace:
     - name: /etc/zabbix/zabbix_agentd.conf
@@ -35,3 +48,9 @@ zabbix-conf2:
     - watch_any:
       - file: zabbix-conf1
       - file: zabbix-conf2
+      - file: zabbix-file2
+
+/etc/sudoers.d/zabbix:
+  file.append:
+    - text: "zabbix        ALL=(ALL)        NOPASSWD: /sbin/blockdev"
+
