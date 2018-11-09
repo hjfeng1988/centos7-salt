@@ -31,7 +31,7 @@ host102:
 
 `salt host101 state.sls install.jdk saltenv=prod`
 
-> master配置文件
+### 6.master配置文件
 ```
 [root@salt-master ~]# grep -Ev "^$|#" /etc/salt/master 
 interface: 0.0.0.0
