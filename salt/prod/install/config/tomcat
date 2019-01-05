@@ -1,9 +1,13 @@
 /usr/local/tomcat*/logs/catalina.out {
     daily
-    rotate 60
+    rotate 7
     dateext
     missingok
     notifempty
-    #compress
+    compress
     copytruncate
+    sharedscripts
+    postrotate
+        gzip /usr/local/tomcat*/logs/localhost_access_log.$(date -d "1 day ago" "+%F").txt
+    endscript
 }

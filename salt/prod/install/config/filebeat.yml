@@ -13,5 +13,10 @@ filebeat.config.modules:
 setup.template.settings:
   index.number_of_shards: 3
 setup.kibana:
-output.logstash:
-  hosts: ["172.16.2.96:5044"]
+output.redis:
+  hosts: ["172.16.2.113:6379"]
+  password: "pass"
+  key: "list_logs"
+  db: 0
+  timeout: 5
+

@@ -1,5 +1,12 @@
-{% set disk = 'vdb' %}
-{% if disk in grains['disks'] %}
+{% if 'vdb' in grains['disks'] %}
+  {% set disk = 'vdb' %}
+{% elif 'xvdb' in grains['SSDs'] %}
+  {% set disk = 'xvdb' %}
+{% else %}
+  {% set disk = '' %}
+{% endif %}
+
+{% if disk %}
 /dev/{{ disk }}:
   lvm.pv_present
 

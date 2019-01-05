@@ -20,4 +20,4 @@ mysql_rsync:
 
 include:
   - user.backup
-  - script.mysql
+  - cron.log

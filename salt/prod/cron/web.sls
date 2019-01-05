@@ -20,4 +20,4 @@ web_rsync:
 
 include:
   - user.backup
-  - script.web
+  - cron.log

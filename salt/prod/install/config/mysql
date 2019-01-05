@@ -1,7 +1,7 @@
-/var/log/cmd.log {
-    create 600 root root
+/var/lib/mysql/*-slow.log {
     monthly
-    rotate 12
+    rotate 3
+    dateext
     missingok
     notifempty
     copytruncate
