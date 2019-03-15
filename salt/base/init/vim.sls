@@ -1,3 +1,6 @@
 /etc/vimrc:
   file.append:
-    - text: "set paste"
+    - text: |
+        set paste
+        set tabstop=4
+        set expandtab

@@ -1,8 +1,9 @@
-/var/lib/mysql/*-slow.log {
+/var/log/mysqld.log /var/lib/mysql/*-slow.log {
+    create 640 mysql mysql
+    notifempty
     monthly
     rotate 3
     dateext
     missingok
-    notifempty
     copytruncate
 }

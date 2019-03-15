@@ -28,3 +28,16 @@ ssh_key_{{ user }}:
     - require:
       - file: /etc/sudoers.d/custom
 {% endfor %}
+
+# 添加super成员密钥
+ssh_key_wykai:
+  user.present:
+    - name: wykai
+    - gid: super
+    - require:
+      - group: groupadd_super
+  ssh_auth.present:
+    - user: wykai
+    - source: salt://init/config/wykai.pub
+    - require:
+      - file: /etc/sudoers.d/custom

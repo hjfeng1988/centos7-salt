@@ -13,4 +13,4 @@ elif [ -d /usr/local/nginx ];then
 fi
 
 # 删除过期备份
-find $web_bak_dir -maxdepth 1 -type f \( -name "full_*" -o -name "nginx_conf_*" \) -mtime +14 -exec rm -f {} \;
+find $web_bak_dir -maxdepth 1 -type f -name "nginx_conf_*" -mtime +15 -exec rm -f {} \;

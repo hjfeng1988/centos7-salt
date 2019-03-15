@@ -2,6 +2,7 @@
 yum-list:
   pkg.installed:
     - pkgs:
+      - bash-completion
       - bind-utils
       - dos2unix
       - htop

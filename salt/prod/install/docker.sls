@@ -19,7 +19,7 @@ docker-conf:
     - name: /etc/docker/daemon.json
     - text: |
         {
-          "registry-mirrors": ["https://ds4kw8nj.mirror.aliyuncs.com"]
+          "registry-mirrors": ["https://registry.docker-cn.com"]
         }
     - require:
       - pkg: docker-install

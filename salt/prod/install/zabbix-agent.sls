@@ -1,13 +1,12 @@
 zabbix-repo:
   cmd.run:
-    - name: rpm -i https://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-release-3.4-2.el7.noarch.rpm
-    - unless: rpm --quiet -q zabbix-release
+    - name: rpm -Uvh https://repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-1.el7.noarch.rpm
+    - unless: rpm --quiet -q zabbix-release-4.0
 
 zabbix-install:
-#  pkg.latest:
-  pkg.installed:
+  pkg.latest:
+#  pkg.installed:
     - name: zabbix-agent
-    - version: 3.4.15
     - require:
       - cmd: zabbix-repo
 
@@ -54,4 +53,3 @@ zabbix-conf2:
 /etc/sudoers.d/zabbix:
   file.append:
     - text: "zabbix        ALL=(ALL)        NOPASSWD: /sbin/blockdev"
-

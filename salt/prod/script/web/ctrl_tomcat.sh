@@ -130,6 +130,7 @@ case $action in
         if [[ $project =~ tomcat_shanghu ]];then
             backup
             echo "${project}_${ymd}_${hm}" > $web_bak_dir/${project}_previous_version
+            find $web_bak_dir -maxdepth 1 -type d -mtime +3 -exec rm -rf {} \;
         fi
         update
         echo "启动tomcat..."
