@@ -5,7 +5,7 @@ import os
 import json
 
 db_dict = []
-dbs = os.popen("redis-cli -a pass info keyspace")
+dbs = os.popen("source /var/lib/zabbix/.redis.auth;redis-cli -a $password info keyspace")
 
 for line in dbs.readlines():
   if '#' not in line:

@@ -1,7 +1,7 @@
 salt-repo:
   cmd.run:
     - name: |
-        yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.noarch.rpm
+        yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest.el7.noarch.rpm
         yum clean expire-cache
         pip uninstall -y urllib3 || true
     - unless: rpm --quiet -q salt-repo

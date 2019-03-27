@@ -14,7 +14,6 @@ filebeat-install:
       - file: filebeat-repo
   cmd.run:
     - name: filebeat modules enable system
-    - unless: filebeat modules list | sed -n '/Enabled/,/Disabled/p' | grep -q system
     - require:
       - pkg: filebeat-install
 
