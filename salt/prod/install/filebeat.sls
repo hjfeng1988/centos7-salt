@@ -12,8 +12,12 @@ filebeat-install:
     - version: 6.4.0
     - require:
       - file: filebeat-repo
+
+filebeat-conf-system:
   cmd.run:
     - name: filebeat modules enable system
+    - unless:
+      - filebeat modules list | sed -n '/Enabled/,/Disabled/p' | grep -q system
     - require:
       - pkg: filebeat-install
 
@@ -36,7 +40,11 @@ filebeat-conf-mysql:
 filebeat-conf:
   file.managed:
     - name: /etc/filebeat/filebeat.yml
+    {% if 'tomcat' in grains['host'] %}
+    - source: salt://install/config/filebeat_tomcat.yml
+    {% else %}
     - source: salt://install/config/filebeat.yml
+    {% endif %}
     - require:
       - pkg: filebeat-install
   service.running:
@@ -45,4 +53,4 @@ filebeat-conf:
     - watch_any:
       - file: filebeat-conf
       - file: filebeat-conf-mysql
-      - cmd: filebeat-install
+      - cmd: filebeat-conf-system

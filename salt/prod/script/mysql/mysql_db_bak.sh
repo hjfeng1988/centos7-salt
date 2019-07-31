@@ -9,7 +9,7 @@ dbs=$(mysql -u$mysql_user -p$mysql_pass -Nse "show databases;" | grep -Ev "infor
 test -d $mysql_bak_dir || mkdir -p $mysql_bak_dir
 for db in $dbs
 do
-    mysqldump -u$mysql_user -p$mysql_pass $db | gzip > $mysql_bak_dir/${db}_$ymd.sql.gz
+    mysqldump --set-gtid-purged=OFF --single-transaction -u$mysql_user -p$mysql_pass $db | gzip > $mysql_bak_dir/${db}_$ymd.sql.gz
     # 删除n天前的备份
     find $mysql_bak_dir -maxdepth 1 -type f -name "$db*" -mtime +10 -exec rm -f {} \;
 done

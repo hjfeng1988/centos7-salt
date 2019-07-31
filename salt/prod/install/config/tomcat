@@ -1,6 +1,6 @@
 /usr/local/tomcat*/logs/catalina.out {
     daily
-    rotate 7
+    rotate 10
     dateext
     missingok
     notifempty
@@ -8,6 +8,6 @@
     copytruncate
     sharedscripts
     postrotate
-        gzip /usr/local/tomcat*/logs/localhost_access_log.$(date -d "1 day ago" "+%F").txt
+        find /usr/local/tomcat*/logs \( -name "localhost_access_log.*" -o -name "catalina.*.log" \) -mtime +10 -exec rm -f {} \;
     endscript
 }

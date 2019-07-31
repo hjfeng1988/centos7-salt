@@ -14,7 +14,7 @@ test -d $log_bak_dir || mkdir -p $log_bak_dir
 # 防止多台同时同步造成io紧张
 sleep $random_time
 # 这个判断不够准确，是否以backup用户挂载着
-ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip test -d $remote_bak_dir
+ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip "test -d $remote_bak_dir"
 [ $? -ne 0 ] && {
     echo "Can't find remote_bak_dir"
     exit 1
@@ -22,7 +22,7 @@ ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip test -d $remote_bak_dir
 
 # rsync nginx日志
 [ -d /var/log/nginx ] && {
-    ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip mkdir -p $remote_log_bak_dir/$HOSTNAME/nginx
+    ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip "mkdir -p $remote_log_bak_dir/$HOSTNAME/nginx"
     rsync $opts -e "ssh -o StrictHostKeyChecking=no -i $rsa" --log-file=$rsync_log /var/log/nginx/*.gz $ruser@$rip:$remote_log_bak_dir/$HOSTNAME/nginx
 }
 
@@ -30,24 +30,19 @@ ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip test -d $remote_bak_dir
 project_dirs=$(ls -l /usr/local | awk '/^d/&&$NF~/tomcat/{print $NF}')
 for project_dir in $project_dirs
 do
-    ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip mkdir -p $remote_log_bak_dir/$HOSTNAME/$project_dir
-    if [[ $project_dir =~ tomcat_shanghu ]];then
-        rsync $opts -e "ssh -o StrictHostKeyChecking=no -i $rsa" --log-file=$rsync_log /usr/local/$project_dir/logs/catalina.out-*.gz $ruser@$rip:$remote_log_bak_dir/$HOSTNAME/$project_dir
-    else
-        rsync $opts -e "ssh -o StrictHostKeyChecking=no -i $rsa" --log-file=$rsync_log /usr/local/$project_dir/logs/*.gz $ruser@$rip:$remote_log_bak_dir/$HOSTNAME/$project_dir
-    fi
-    find /usr/local/$project_dir/logs -type f -name "localhost_access_log.*" -mtime +7 -exec rm -f {} \;
+    ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip "mkdir -p $remote_log_bak_dir/$HOSTNAME/$project_dir"
+    rsync $opts -e "ssh -o StrictHostKeyChecking=no -i $rsa" --log-file=$rsync_log /usr/local/$project_dir/logs/catalina.out-*.gz $ruser@$rip:$remote_log_bak_dir/$HOSTNAME/$project_dir
 done
 
 # rsync bluecloud日志
 [ -d /usr/local/bluecloud ] && {
-    ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip mkdir -p $remote_log_bak_dir/$HOSTNAME/bluecloud
-    rsync $opts -e "ssh -o StrictHostKeyChecking=no -i $rsa" --log-file=$rsync_log /usr/local/bluecloud/logs/*.gz $ruser@$rip:$remote_log_bak_dir/$HOSTNAME/bluecloud
+    ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip "mkdir -p $remote_log_bak_dir/$HOSTNAME/bluecloud"
+    rsync $opts -e "ssh -o StrictHostKeyChecking=no -i $rsa" --log-file=$rsync_log /usr/local/bluecloud/logs/ $ruser@$rip:$remote_log_bak_dir/$HOSTNAME/bluecloud
 }
 
 # rsync mysql-bin日志
 [ -d /var/lib/mysql ] && {
-    ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip mkdir -p $remote_log_bak_dir/$HOSTNAME
+    ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip "mkdir -p $remote_log_bak_dir/$HOSTNAME"
     rsync $opts -e "ssh -o StrictHostKeyChecking=no -i $rsa" --log-file=$rsync_log /var/lib/mysql/mysql-bin.* $ruser@$rip:$remote_log_bak_dir/$HOSTNAME
 }
 

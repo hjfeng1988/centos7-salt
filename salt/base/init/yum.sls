@@ -6,12 +6,14 @@ yum-list:
       - bind-utils
       - dos2unix
       - htop
+      - iftop
       - lrzsz
       - lsof
       - lvm2
       - ntpdate
       - net-tools
       - rsync
+      - sysstat
       - tcpdump
       - telnet
       - tmux

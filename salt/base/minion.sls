@@ -20,7 +20,7 @@ salt-minion:
     - source: salt://config/minion
     - template: jinja
     - defaults:
-    {% if "172.16" in grains['fqdn_ip4']|string %}
+    {% if "HD1" in grains['host'] %}
       master_ip: {{ salt_master }}
     {% else %}
       master_ip: {{ pillar['salt_master']['ip'] }}

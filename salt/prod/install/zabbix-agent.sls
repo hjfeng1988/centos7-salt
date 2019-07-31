@@ -4,9 +4,10 @@ zabbix-repo:
     - unless: rpm --quiet -q zabbix-release-4.0
 
 zabbix-install:
-  pkg.latest:
-#  pkg.installed:
+  #pkg.latest:
+  pkg.installed:
     - name: zabbix-agent
+    - version: 4.0.3
     - require:
       - cmd: zabbix-repo
 
@@ -27,7 +28,7 @@ zabbix-conf1:
   file.replace:
     - name: /etc/zabbix/zabbix_agentd.conf
     - pattern: '^Server=.*'
-    {% if "172.16" in grains['fqdn_ip4']|string %}
+    {% if 'HD1' in grains['host'] %}
     - repl: 'Server={{ pillar['hd1g_zabbix_proxy']['ip'] }}'
     {% else %}
     - repl: 'Server={{ pillar['zabbix_server']['ip'] }}'

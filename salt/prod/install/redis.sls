@@ -30,7 +30,7 @@ redis-confi2:
   file.replace:
     - name: /etc/redis.conf
     - pattern: '^# requirepass.*'
-    - repl: 'requirepass xmld0592'
+    - repl: 'requirepass pass'
     - require:
       - pkg: redis-install
   service.running:

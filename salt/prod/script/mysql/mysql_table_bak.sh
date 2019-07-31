@@ -3,8 +3,8 @@
 source /data/script/common_vars.sh
 source /data/script/secret_vars.sh
 
-db=bluestore_core_db
-tables="courier user_address user_finance user_function user_info user_zone zone weixin_user_info"
+db="bluestore_core_db"
+tables="courier user_address user_finance user_function user_info user_zone zone"
 
 test -d $mysql_bak_dir || mkdir -p $mysql_bak_dir
 mkdir $mysql_bak_dir/${db}_${ymd}_${hm}

@@ -4,10 +4,11 @@ source /data/script/common_vars.sh
 
 # 脚本用法
 function usage(){
-    echo "脚本用法：$0 -d /usr/local/tomcat_shanghu -a update"
-    echo "-d:"
-    echo "    /usr/local/tomcat_shanghu"
-    echo "    /usr/local/tomcat_weixin"
+    echo "脚本用法：$0 -p tomcat_shanghu -a update"
+    echo "-p:"
+    echo "    tomcat_shanghu"
+    echo "    tomcat_weixin"
+    echo "    tomcat_life"
     echo "-a:"
     echo "    update   更新"
     echo "    offline  下线"
@@ -15,28 +16,36 @@ function usage(){
     echo "-t:"
     echo "    10       下线睡眠时间"
     echo "-c:"
-    echo "    http://127.0.0.1:8081/check.html 服务检测地址"
+    echo "    http://127.0.0.1:port/deploy/status 服务检测地址"
     exit 1
 }
 
 # 下载
 function download(){
     [ -d $update_dir/$project ] || mkdir -p $update_dir/$project
-    cd $update_dir/$project
-
     if [ -f $update_dir/$project/ROOT.war ];then
         echo "使用本机的更新文件"
     else
-        echo "开始下载war"
-        wget -Nq -t3 --connect-timeout=5 http://$ftp_server/${project%[0-9]*}/ROOT.war
-        [ $? -ne 0 ] && { echo "下载失败，请重试";exit 1; }
+        echo "开始下载更新文件"
+        if [ $project == "shanghu-job" ];then
+            wget -Nq -t2 --connect-timeout=5 http://$ftp_server/shanghu/ROOT.war -O $update_dir/$project/ROOT.war
+        else
+            wget -Nq -t2 --connect-timeout=5 http://$ftp_server/${project%[0-9]*}/ROOT.war -O $update_dir/$project/ROOT.war
+        fi
+        if [ $? -ne 0 ];then
+            echo "下载失败，请重试"
+            rm -f $update_dir/$project/ROOT.war
+            exit 1
+        fi
     fi
 }
 
 # 下线
 function offline(){
+    port=$(grep -oP '(?<=<Connector port=")\d+(?=" protocol="HTTP)' $project_dir/conf/server.xml)
+    down_url="http://127.0.0.1:$port/deploy/status"
+    curl -s -X DELETE $down_url
     echo "开始下线，等待${sleep_time:-10}秒"
-    rm -f $project_dir/webapps/ROOT/online.html
     sleep ${sleep_time:-10}
 }
 
@@ -44,29 +53,35 @@ function offline(){
 function update(){
     rm -rf $project_dir/webapps/ROOT*
     mv $update_dir/$project/ROOT.war $project_dir/webapps/
+    echo "更新完成"
 }
 
 # 服务检测
-function service_check() {
+function check(){
+    echo "等待服务检测"
     sleep 20
     for((i=1;i<10;i++))
     do
         sleep 5
-        http_code=$(curl --connect-timeout 3 -m 5 -sI -o /dev/null -w %{http_code} ${check_url:-http://127.0.0.1:8081/check.html})
+        port=$(grep -oP '(?<=<Connector port=")\d+(?=" protocol="HTTP)' $project_dir/conf/server.xml)
+        check_url=${check_url:-http://127.0.0.1:$port/deploy/status}
+        http_code=$(curl --connect-timeout 3 -m 5 -sI -o /dev/null -w %{http_code} $check_url)
         if [ "$http_code" -eq 200 ];then
-            echo "tomcat服务检测成功"
+            echo "服务检测成功"
             break
         else
-            echo "第$i次tomcat服务检测失败，等待重新检测"
-            [ $i -ge 5 ] && { echo "tomcat服务检测失败次数过多，详情请查看tomcat日志";exit 1; }
-        fi
+            echo "第$i次服务检测失败，等待重新检测"
+            if [ $i -ge 5 ];then
+                echo "服务检测失败次数过多，详情请查看日志"
+                exit 1
+            fi
+        fi 
     done
 }
 
 # 上线
 function online(){
     echo "开始上线"
-    touch $project_dir/webapps/ROOT/online.html
 }
 
 # 备份
@@ -94,12 +109,12 @@ function rollback(){
 }
 
 # 检测选项，参数赋值
-ARGS=`getopt -o a:d:c:t: -n 'example.bash' -- "$@"`
+ARGS=`getopt -o p:a:c:t: -n 'example.bash' -- "$@"`
 [ $? -ne 0 ] && usage
 eval set -- "$ARGS"
 while true;do
     case "$1" in
-        -d) project_dir=$2; shift 2;;
+        -p) project=$2; shift 2;;
         -a) action=$2; shift 2;;
         -c) check_url=$2; shift 2;;
         -t) ! [[ $2 =~ ^[1-9][0-9]*$ ]] && { echo "$2不是可用数字";exit 1; }; sleep_time=$2; shift 2;;
@@ -108,17 +123,17 @@ while true;do
     esac
 done
 
-# 判断-d参数
-if [ -z "$project_dir" ];then
-    echo "选项-d的参数为空"
+# 判断-p参数
+if [ -z "$project" ];then
+    echo "选项-p的参数不能为空"
     usage
 else
+    project_dir=/usr/local/tomcat_$project
     if [ ! -d "$project_dir/webapps" ];then
         echo "$project_dir下不存在webapps目录，不是有效的tomcat目录"
         exit 1
     fi
 fi
-project=$(basename $project_dir)
 
 # 判断-a参数
 case $action in
@@ -126,16 +141,16 @@ case $action in
         download
         offline
         echo "停止tomcat..."
-        systemctl stop $project
-        if [[ $project =~ tomcat_shanghu ]];then
+        systemctl stop tomcat_$project
+        if [[ $project =~ shanghu ]];then
             backup
             echo "${project}_${ymd}_${hm}" > $web_bak_dir/${project}_previous_version
             find $web_bak_dir -maxdepth 1 -type d -mtime +3 -exec rm -rf {} \;
         fi
         update
         echo "启动tomcat..."
-        systemctl start $project
-        service_check
+        systemctl start tomcat_$project
+        check
         online
         ;;
     offline)
@@ -154,11 +169,11 @@ case $action in
         rollback
         echo "启动tomcat..."
         systemctl start $project
-        service_check
+        check
         online
         ;;
     *)
-        echo "未定义的action"
+        echo "选项-a的参数未知"
         usage
         ;;
 esac

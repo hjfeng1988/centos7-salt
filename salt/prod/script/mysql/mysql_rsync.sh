@@ -14,14 +14,14 @@ test -d $log_bak_dir || mkdir -p $log_bak_dir
 # 防止多台同时同步造成io紧张
 sleep $random_time
 # 这个判断不够准确，是否以backup用户挂载着
-ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip test -d $remote_bak_dir
+ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip "test -d $remote_bak_dir"
 [ $? -ne 0 ] && {
     echo "Can't find remote_bak_dir"
     exit 1
 }
 
 # rsync mysql备份
-ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip mkdir -p $remote_bak_dir/mysql/$HOSTNAME
+ssh -o StrictHostKeyChecking=no -i $rsa $ruser@$rip "mkdir -p $remote_bak_dir/mysql/$HOSTNAME"
 rsync $opts -e "ssh -o StrictHostKeyChecking=no -i $rsa" --log-file=$rsync_log $mysql_bak_dir/*gz $ruser@$rip:$remote_bak_dir/mysql/$HOSTNAME
 
 # 删除rsync日志
