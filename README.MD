@@ -1,6 +1,18 @@
-### 1.master配置好/etc/salt/roster
+### 1.master配置
 
 ```
+[root@salt-master ~]# grep -Ev "^$|#" /etc/salt/master 
+interface: 0.0.0.0
+file_roots:
+  base:
+    - /srv/salt/base
+  prod:
+    - /srv/salt/prod
+pillar_roots:
+  base:
+    - /srv/pillar/base
+  prod:
+    - /srv/pillar/prod
 [root@salt-master ~]# cat /etc/salt/roster 
 host101:
   host: 192.168.1.101
@@ -31,19 +43,4 @@ host102:
 
 `salt host101 state.sls install.jdk saltenv=prod`
 
-### 6.master配置文件
-```
-[root@salt-master ~]# grep -Ev "^$|#" /etc/salt/master 
-interface: 0.0.0.0
-file_roots:
-  base:
-    - /srv/salt/base
-  prod:
-    - /srv/salt/prod
-pillar_roots:
-  base:
-    - /srv/pillar/base
-  prod:
-    - /srv/pillar/prod
-```
 
