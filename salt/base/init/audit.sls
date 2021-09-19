@@ -5,7 +5,7 @@
     - require:
       - file: /etc/profile
 
-# /etc/rsyslog.conf rsyslog，local1日志不记录到messages
+# local1日志不记录到messages
 /etc/rsyslog.conf1:
   file.replace:
     - name: /etc/rsyslog.conf
@@ -14,8 +14,8 @@
     - require:
       - file: /etc/profile.d/cmd_log.sh
 
+# local1.notice单独记录到cmd.log
 /etc/rsyslog.conf2:
-  # /etc/rsyslog.conf local1.notice单独记录到cmd.log
   file.append:
     - name: /etc/rsyslog.conf
     - text: "local1.notice                                           /var/log/cmd.log"

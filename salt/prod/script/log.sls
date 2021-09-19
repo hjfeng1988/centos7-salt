@@ -1,7 +1,4 @@
-include:
-  - script.base
-
-log-sh:
+log-script:
   file.recurse:
     - name: /data/script
     - source: salt://script/log

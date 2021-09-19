@@ -43,7 +43,7 @@ hjfeng_sshkey="ssh-rsa AAAAB3NzaC1yc2EAAA..."
 }
 
 # 限制admin只能添加hjfeng
-[[ "$group" == "admin" && ! "$user" =~ ^(hjfeng|lzl)$ ]] && {
+[[ "$group" == "admin" && ! "$user" =~ ^(hjfeng|hpyuan)$ ]] && {
     echo_red "Warning:Only user of hjfeng|lzl can add in group of admin" 
     exit 1
 }

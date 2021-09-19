@@ -9,6 +9,7 @@ docker-repo:
 docker-install:
   pkg.installed:
     - name: docker-ce
+#    - version: 20.10.1-3.el7
     - require:
       - cmd: docker-repo
 

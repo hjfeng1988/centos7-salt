@@ -4,11 +4,11 @@
 import os
 import json
 
-disk_list = [ "/dev/"+disk for disk in os.listdir("/sys/block") if not disk.startswith(('sr','dm')) ]
-disk_dict = []
+disks = [ disk for disk in os.listdir("/sys/block") if not disk.startswith(('sr','dm')) ]
+list = []
 
-for disk in disk_list:
-    size = os.popen("sudo /sbin/blockdev --getss %s" % disk)
-    disk_dict.append({"{#DISK_NAME}":disk,"{#SEC_SIZE}":size.read().strip()})
+for disk in disks:
+    size = os.popen("sudo /sbin/blockdev --getss /dev/%s" % disk)
+    list.append({"{#DISK_NAME}": "/dev/%s" % disk,"{#SEC_SIZE}": size.read().strip()})
 
-print json.dumps({"data": disk_dict})
+print json.dumps({"data": list})

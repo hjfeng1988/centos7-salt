@@ -1,2 +1,2 @@
-CATALINA_PID="$CATALINA_BASE/logs/tomcat.pid"
-JAVA_OPTS="-Xms1G -Xmx1G"
+JAVA_OPTS="-Xms1g -Xmx2g -XX:MetaspaceSize=64M -XX:MaxMetaspaceSize=256M"
+CATALINA_OPTS=""

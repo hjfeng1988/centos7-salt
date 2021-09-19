@@ -3,7 +3,7 @@ base-cmd:
     - name: mkdir /data -p
     - unless: test -d /data
 
-base-sh:
+base-script:
   file.recurse:
     - name: /data/script
     - source: salt://script/base

@@ -1,8 +1,5 @@
 include:
   - install.jdk
-{#
-{% set version = '7.0.86' %}
-#} 
 {% set version = '7.0.68' %}
 
 tomcat-install:

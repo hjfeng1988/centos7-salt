@@ -1,0 +1,24 @@
+filebeat.inputs:
+- type: log
+  paths:
+    - /usr/local/tomcat_*/logs/catalina.out
+  multiline:
+    pattern: '^\d{4}\-\d\d-\d\d|\d{2}-\w{3}-\d{4}'
+    negate: true
+    match: after
+  fields:
+    event.module: bluestore
+    fileset.name: applog
+  fields_under_root: true
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~
+
+output.logstash:
+  hosts: ["172.16.2.102:5044"]

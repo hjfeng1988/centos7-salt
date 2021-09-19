@@ -94,6 +94,7 @@ function start(){
         echo "服务已经启动了"
     else
         echo "开始启动"
+        mkdir -p logs/$project
         nohup java $JAVA_OPTS -jar lib/$project-1.0.0.jar $APPLICATION_OPTS &>> logs/$project/catalina.out &
     fi
 }
@@ -139,7 +140,8 @@ function online(){
 ARGS=`getopt -o p:a:t: -n 'example.bash' -- "$@"`
 [ $? -ne 0 ] && usage
 eval set -- "$ARGS"
-while true;do
+while true
+do
     case "$1" in
         -p) project=$2; shift 2;;
         -a) action=$2; shift 2;;

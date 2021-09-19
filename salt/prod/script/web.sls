@@ -2,7 +2,7 @@ include:
   - script.base
   - script.log
 
-web-sh:
+web-script:
   file.recurse:
     - name: /data/script
     - source: salt://script/web

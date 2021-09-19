@@ -4,11 +4,11 @@ source /data/script/common_vars.sh
 
 # 脚本用法
 function usage(){
-    echo "脚本用法：$0 -p tomcat_shanghu -a update"
+    echo "脚本用法：$0 -p shanghu -a update"
     echo "-p:"
-    echo "    tomcat_shanghu"
-    echo "    tomcat_weixin"
-    echo "    tomcat_life"
+    echo "    shanghu"
+    echo "    weixin"
+    echo "    life"
     echo "-a:"
     echo "    update   更新"
     echo "    offline  下线"
@@ -81,43 +81,22 @@ function check(){
 
 # 上线
 function online(){
+	# nginx健康检查，自动上线
     echo "开始上线"
 }
 
-# 备份
-function backup(){
-    [ -d $web_bak_dir ] || mkdir -p $web_bak_dir
-    echo "项目备份至:$web_bak_dir/${project}_${ymd}_${hm}"
-    mv $project_dir/webapps/ROOT $web_bak_dir/${project}_${ymd}_${hm}
-}
-
-#回滚
-function rollback(){
-    if [ -e "$web_bak_dir/${project}_previous_version" ];then
-        previous_version=$(cat $web_bak_dir/${project}_previous_version)
-        if [ ! -d "$web_bak_dir/$previous_version" ];then
-            echo "上一版本不存在"
-            exit 1;
-        fi
-    else
-        echo "记录上一版本的文件不存在"
-        exit 1
-    fi
-    echo "项目回滚至上一版本:$web_bak_dir/$previous_version"
-    cp -a $web_bak_dir/$previous_version $project_dir/webapps/ROOT
-    chown -R tomcat:tomcat $project_dir/webapps/ROOT
-}
 
 # 检测选项，参数赋值
 ARGS=`getopt -o p:a:c:t: -n 'example.bash' -- "$@"`
 [ $? -ne 0 ] && usage
 eval set -- "$ARGS"
-while true;do
+while true
+do
     case "$1" in
         -p) project=$2; shift 2;;
         -a) action=$2; shift 2;;
         -c) check_url=$2; shift 2;;
-        -t) ! [[ $2 =~ ^[1-9][0-9]*$ ]] && { echo "$2不是可用数字";exit 1; }; sleep_time=$2; shift 2;;
+        -t) ! [[ $2 =~ ^[1-9][0-9]*$ ]] && { echo "$2不是数字类型";exit 1; }; sleep_time=$2; shift 2;;
         --) shift; break;;
         *) usage;;
     esac
@@ -142,11 +121,6 @@ case $action in
         offline
         echo "停止tomcat..."
         systemctl stop tomcat_$project
-        if [[ $project =~ shanghu ]];then
-            backup
-            echo "${project}_${ymd}_${hm}" > $web_bak_dir/${project}_previous_version
-            find $web_bak_dir -maxdepth 1 -type d -mtime +3 -exec rm -rf {} \;
-        fi
         update
         echo "启动tomcat..."
         systemctl start tomcat_$project
@@ -157,23 +131,8 @@ case $action in
         offline;;
     online)
         online;;
-    rollback)
-        if [[ ! $project =~ tomcat_shanghu ]];then
-            echo "只有tomcat_shanghu项目支持rollback"
-            exit 1
-        fi
-        offline
-        echo "停止tomcat..."
-        systemctl stop $project
-        backup
-        rollback
-        echo "启动tomcat..."
-        systemctl start $project
-        check
-        online
-        ;;
     *)
-        echo "选项-a的参数未知"
+        echo "选项-a的参数未知，重启使用systemctl"
         usage
         ;;
 esac
